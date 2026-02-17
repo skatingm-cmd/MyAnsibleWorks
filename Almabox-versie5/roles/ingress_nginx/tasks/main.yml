@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for ingress_nginx
+- name: Create ingress namespace
+  import_tasks: namespace.yml
+
+- name: Install ingress
+  import_tasks: install.yml

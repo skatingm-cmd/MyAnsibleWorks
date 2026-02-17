@@ -1,0 +1,4 @@
+---
+cni_plugin: flannel
+kube_pod_cidr: ""
+

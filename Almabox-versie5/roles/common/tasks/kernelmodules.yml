@@ -1,0 +1,17 @@
+---
+- name: Persist kernel modules for Kubernetes
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      {% for module in k8s_kernel_modules %}
+      {{ module }}
+      {% endfor %}
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load required kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ k8s_kernel_modules }}"

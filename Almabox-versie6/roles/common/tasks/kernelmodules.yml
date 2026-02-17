@@ -1,0 +1,20 @@
+---
+- name: Ensure kernel module packages are installed
+  ansible.builtin.package:
+    name: kernel-modules-extra
+    state: present
+
+- name: Persist kernel modules for Kubernetes
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      {{ k8s_kernel_modules | join('\n') }}
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load required kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ k8s_kernel_modules }}"

@@ -1,0 +1,30 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for roles/argocd
+- name: Ensure ArgoCD namespace exists
+  ansible.builtin.command: >
+    kubectl apply -f -
+  environment:
+    KUBECONFIG: /home/admin/.kube/config
+  args:
+    stdin: |
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: argocd
+
+- name: Apply ArgoCD manifests
+  ansible.builtin.command: >
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  environment:
+    KUBECONFIG: /home/admin/.kube/config
+
+- name: Wait for all ArgoCD pods to be Ready
+  ansible.builtin.command: >
+    kubectl -n argocd wait
+    --for=condition=Ready
+    pod
+    --all
+    --timeout=300s
+  environment:
+    KUBECONFIG: /home/admin/.kube/config

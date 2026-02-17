@@ -1,0 +1,6 @@
+---
+- name: Install the Docker repository
+  import_tasks: 01_reporhel.yml
+
+- name: Install containerd
+  import_tasks: 02_install.yml

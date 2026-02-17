@@ -1,0 +1,11 @@
+---
+- name: Ensure node is not already part of a cluster
+  ansible.builtin.stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
+
+- name: Fail if node is already joined
+  ansible.builtin.fail:
+    msg: "Node already appears to be part of a Kubernetes cluster"
+  when: kubelet_conf.stat.exists
+

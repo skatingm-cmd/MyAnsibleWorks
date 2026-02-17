@@ -1,0 +1,6 @@
+---
+- name: Load CNI defaults
+  import_tasks: 01_loadcnidefault.yml
+
+- name: Join worker nodes
+  import_tasks: 02_joinworkers.yml

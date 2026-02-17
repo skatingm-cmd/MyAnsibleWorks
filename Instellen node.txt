@@ -1,0 +1,34 @@
+hostname
+
+1. hostname
+   hostnamectl
+
+2. hostnamectl set-hostname almanode1
+
+3. sudo nano /etc/hosts
+
+4. 127.0.0.1   localhost
+   127.0.1.1   almanode1
+   10.0.2.20   almanode1
+
+5. sudo reboot
+
+
+IP adres
+
+1. nmcli device status
+
+2. statisch IP instellen
+nmcli con mod enp3s0 
+ipv4.method manual \
+ipv4.addresses 10.0.2.20/24 \
+ipv4.gateway 10.0.2.1 \
+
+of als dit al eens ingesteld is
+
+nmcli con mod enp3s0 ipv4.addresses 10.0.2.25/24
+
+3. sudo reboot
+
+10.0.2.26
+almanode7

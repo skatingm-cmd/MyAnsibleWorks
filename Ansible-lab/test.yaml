@@ -1,0 +1,8 @@
+- hosts:
+    - almaNodes
+    - oracleNodes
+    - ubuntuNodes
+  gather_facts: no
+  tasks:
+    - name: Test connection
+      ping:

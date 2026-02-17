@@ -1,0 +1,18 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for kubernetes
+kubernetes_version: 1.29
+
+package_version: 1.29.2
+
+kubernetes_packages:
+  - "kubelet-{{ package_version }}"
+  - "kubeadm-{{ package_version }}"
+  - "kubectl-{{ package_version }}"
+
+cni_plugin: flannel
+kube_pod_cidr: ""
+
+kube_apiserver_advertise_address: "{{ ansible_default_ipv4.address }}"
+
+single_node: true

@@ -1,0 +1,7 @@
+---
+kubernetes_version: 1.35
+kubernetes_release: ".0"
+
+cni_plugin: flannel
+kube_pod_cidr: ""
+kube_apiserver_advertise_address: "{{ ansible_facts['default_ipv4']['address'] }}"

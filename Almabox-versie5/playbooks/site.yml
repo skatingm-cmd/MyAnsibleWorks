@@ -1,0 +1,5 @@
+---
+- import_playbook: prep.yml
+- import_playbook: k8s.yml
+- import_playbook: argoprep.yml
+- import_playbook: argocd.yml

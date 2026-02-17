@@ -1,0 +1,77 @@
+#SPDX-License-Identifier: MIT-0
+# tasks file for roles/common
+---
+# Common OS preparation for Kubernetes (AlmaLinux)
+#---Swap---
+- name: Disable swap (runtime)
+  ansible.builtin.command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+  changed_when: ansible_swaptotal_mb | int > 0
+
+- name: Comment out swap entries in fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '\sswap\s'
+    state: absent
+
+#---Kernel modules---
+- name: Persist kernel modules for Kubernetes
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      overlay
+      br_netfilter
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load required kernel modules
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - overlay
+    - br_netfilter
+
+#---Sysctl---
+- name: Apply sysctl params for Kubernetes
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop:
+    - { name: net.bridge.bridge-nf-call-iptables,  value: 1 }
+    - { name: net.bridge.bridge-nf-call-ip6tables, value: 1 }
+    - { name: net.ipv4.ip_forward,                 value: 1 }
+
+#---SELinux---
+- name: Set SELinux to permissive (runtime + persistent)
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive
+
+- name: Persist SELinux permissive
+  ansible.builtin.replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUX=enforcing'
+    replace: 'SELINUX=permissive'
+
+#---Time synchronization---
+- name: Install chrony
+  ansible.builtin.dnf:
+    name: chrony
+    state: present
+
+- name: Enable and start chrony
+  ansible.builtin.systemd:
+    name: chronyd
+    enabled: yes
+    state: started
+
+#---Firewall---
+- name: Disable firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: stopped
+    enabled: no

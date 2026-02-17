@@ -1,0 +1,10 @@
+---
+- name: Kubernetes bootstrap
+  hosts: k8s
+  become: true
+  roles:
+    - common
+    - containerd
+    - kubernetes
+    - argocd
+    - app_juiceshop

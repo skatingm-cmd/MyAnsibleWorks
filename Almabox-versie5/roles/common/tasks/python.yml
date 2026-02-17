@@ -1,0 +1,25 @@
+---
+- name: Ensure python 3 is installed
+  ansible.builtin.package:
+    name: "{{ python_packages }}"
+    state: present
+
+- name: Install Python dependencies for kubernetes.core
+  ansible.builtin.pip:
+    name: "{{ python_pip_packages }}"
+    state: present
+    executable: pip3
+
+- name: Assert configured Python modules are importable
+  ansible.builtin.command:
+    argv:
+      - python3
+      - -c
+      - |
+          {% for module in python_imports %}
+          import {{ module }};
+          {% endfor %}
+          print('OK')
+  changed_when: false
+
+

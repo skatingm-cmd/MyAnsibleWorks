@@ -1,0 +1,10 @@
+---
+- name: Check swap is disabled
+  ansible.builtin.command: swapon --summary
+  register: swap_check
+  changed_when: false
+
+- name: Fail if swap is enabled
+  ansible.builtin.fail:
+    msg: "Swap is enabled. Kubernetes requires swap to be disabled."
+  when: swap_check.stdout | trim != ""

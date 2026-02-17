@@ -1,0 +1,10 @@
+---
+- name: Set SELinux to permissive (runtime + persistent)
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive
+  register: selinux_change
+
+- name: Reboot if SELinux change requires it
+  ansible.builtin.reboot:
+  when: selinux_change.reboot_required | bool

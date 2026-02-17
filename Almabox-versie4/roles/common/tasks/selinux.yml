@@ -1,0 +1,11 @@
+---
+- name: Set SELinux to permissive (runtime + persistent)
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive
+
+- name: Persist SELinux permissive
+  ansible.builtin.replace:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    replace: 'SELINUX=permissive'

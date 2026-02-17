@@ -1,0 +1,66 @@
+server:
+  service:
+    type: NodePort
+    nodePortHttp: 30080
+    nodePortHttps: 30443
+
+  ingress:
+    enabled: true
+    ingressClassName: {{ argocd_ingress_class }}
+    hosts:
+      - {{ argocd_hostname }}
+    paths:
+      - /
+    pathType: Prefix
+    tls: []
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+repoServer:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 700m
+      memory: 512Mi
+
+  livenessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+    periodSeconds: 20
+    failureThreshold: 5
+
+  readinessProbe:
+    initialDelaySeconds: 60
+    timeoutSeconds: 5
+    periodSeconds: 20
+    failureThreshold: 5
+
+controller:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 700m
+      memory: 768Mi
+
+dex:
+  enabled: false
+
+notifications:
+  enabled: false
+
+config:
+  params:
+    server.insecure: true
+  cm:
+    reposerver.parallelism.limit: "1"

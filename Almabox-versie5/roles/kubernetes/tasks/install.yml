@@ -1,0 +1,19 @@
+---
+- name: Assert containerd is present
+  ansible.builtin.command: containerd --version
+  changed_when: false
+
+- name: Install Kubernetes packages
+  ansible.builtin.package:
+    name: "{{ kubernetes_packages }}"
+    state: present
+
+- name: Enable kubelet service
+  ansible.builtin.systemd:
+    name: kubelet
+    enabled: true
+
+- name: Ensure kubelet is stopped before kubeadm init
+  ansible.builtin.systemd:
+    name: kubelet
+    state: stopped

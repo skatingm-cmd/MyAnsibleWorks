@@ -1,0 +1,44 @@
+---
+- name: Install firewalld
+  ansible.builtin.package:
+    name: firewalld
+    state: present
+
+- name: Enable and start firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Allow Kubernetes control plane ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop: "{{ k8s_control_plane_ports }}"
+  when: inventory_hostname in groups['controlplane']
+
+- name: Allow Kubernetes worker ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop: "{{ k8s_worker_ports }}"
+  when: inventory_hostname in groups['workers']
+
+- name: Allow ingress ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    state: enabled
+  loop: "{{ k8s_ingress_ports }}"
+
+- name: Allow pod network CIDR
+  ansible.posix.firewalld:
+    source: "{{ k8s_pod_network_cidr }}"
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  ansible.builtin.command: firewall-cmd --reload
+  changed_when: false

@@ -1,0 +1,11 @@
+repoServer:
+  securityContext:
+    readOnlyRootFilesystem: false
+
+  volumes:
+    - name: tmp
+      emptyDir: {}
+
+  volumeMounts:
+    - mountPath: /tmp
+      name: tmp

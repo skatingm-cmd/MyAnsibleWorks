@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for ipvs
+- name: install ipvs
+  import_tasks: installipvs.yml
+
+- name: load ipvs modules
+  import_tasks: loadpersistipvs.yml

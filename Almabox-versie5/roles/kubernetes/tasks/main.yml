@@ -1,0 +1,30 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for kubernetes
+- name: Add Kubernetes repository
+  import_tasks: reporhel.yml
+  when: ansible_os_family == "RedHat"
+
+- name: Install Kubernetes
+  import_tasks: install.yml
+
+- name: Kubernetes preflight checks
+  import_tasks: preflight.yml
+
+- name: Load CNI defaults
+  ansible.builtin.include_vars: "{{ role_path }}/defaults/cni/{{ cni_plugin }}.yml"
+
+- name: Kubeadm init
+  import_tasks: init.yml
+
+- name: Kube configuration for root
+  import_tasks: kubeconfig.yml
+
+- name: Kubernetes RBAC bootstrap
+  import_tasks: rbac.yml
+
+- name: Configure CNI
+  import_tasks: "cni/{{ cni_plugin }}.yml"
+
+- name: Create single node cluster
+  import_tasks: single_node.yml

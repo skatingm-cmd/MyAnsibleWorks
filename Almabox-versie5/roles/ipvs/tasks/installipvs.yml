@@ -1,0 +1,5 @@
+---
+- name: Install IPVS packages
+  ansible.builtin.package:
+    name: "{{ ipvs_packages }}"
+    state: present

@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: MIT-0
+---
+galaxy_info:
+  role_name: ingress_nginx
+  description: Install ingress-nginx controller using Helm
+  license: MIT
+  min_ansible_version: "2.14"
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"

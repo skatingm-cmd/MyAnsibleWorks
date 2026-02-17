@@ -1,0 +1,8 @@
+---
+- name: Apply sysctl params for Kubernetes
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: yes
+  loop: "{{ common_sysctl_params }}"

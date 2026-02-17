@@ -1,0 +1,4 @@
+- name: Install kubectl (controlplane only)
+  ansible.builtin.package:
+    name: "kubectl-{{ kubernetes_version }}{{ kubernetes_release }}"
+    state: present

@@ -1,0 +1,8 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for k8scontrolconfig
+cni_plugin: flannel
+
+kube_pod_cidr: ""
+
+kube_apiserver_advertise_address: "{{ ansible_facts['default_ipv4']['address'] }}"

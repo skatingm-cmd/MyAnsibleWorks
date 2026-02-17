@@ -1,0 +1,7 @@
+---
+- name: Install Flannel CNI
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/flannel-io/flannel/v0.25.4/Documentation/kube-flannel.yml
+    kubeconfig: /etc/kubernetes/admin.conf
+

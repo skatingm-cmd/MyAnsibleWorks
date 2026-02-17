@@ -1,0 +1,6 @@
+- name: Platform services
+  hosts: k8s
+  become: true
+  roles:
+    - argocd
+    - ingress

@@ -1,0 +1,11 @@
+---
+- name: Disable swap if enabled
+  ansible.builtin.shell: |
+    swapoff -a
+  when: ansible_swaptotal_mb | int > 0
+
+- name: Comment out swap entries in fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '\sswap\s'
+    state: absent

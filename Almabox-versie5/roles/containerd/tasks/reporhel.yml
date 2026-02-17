@@ -1,0 +1,15 @@
+---
+- name: Install required packages for containerd repo
+  ansible.builtin.package:
+    name: "{{ docker_packages }}"
+    state: present
+
+- name: Add Docker CE repository (RHEL)
+  ansible.builtin.yum_repository:
+    name: docker-ce
+    description: Docker CE Stable - $basearch
+    baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+    enabled: yes
+    gpgcheck: yes
+    gpgkey: https://download.docker.com/linux/centos/gpg
+

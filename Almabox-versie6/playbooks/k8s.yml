@@ -1,0 +1,7 @@
+---
+- name: Prep k8s nodes met ipvs en kubernetes deel 1
+  hosts: k8s
+  become: true
+  roles:
+    - ipvs
+    - kubernetes

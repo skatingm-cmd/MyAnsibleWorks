@@ -1,0 +1,20 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for common
+common_kernel_modules:
+  - overlay
+  - br_netfilter
+
+common_sysctl_params:
+  - { name: net.bridge.bridge-nf-call-iptables,  value: 1 }
+  - { name: net.bridge.bridge-nf-call-ip6tables, value: 1 }
+  - { name: net.ipv4.ip_forward,                 value: 1 }
+
+common_firewalld_trusted_interfaces:
+  - cni0
+  - flannel.1
+  - docker0
+
+common_firewalld_open_ports:
+  - 6443/tcp
+  - 30000-32767/tcp

@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Download Helm install script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /tmp/get-helm-3.sh
+    mode: "0755"
+  when: helm_check.rc != 0
+
+- name: Install Helm
+  ansible.builtin.command: /tmp/get-helm-3.sh
+  environment:
+    HELM_INSTALL_DIR: "{{ helm_install_dir }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
+  when: helm_check.rc != 0
+

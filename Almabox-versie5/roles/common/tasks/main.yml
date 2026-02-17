@@ -1,0 +1,23 @@
+#SPDX-License-Identifier: MIT-0
+# tasks file for common
+---
+- name: Python runtime
+  import_tasks: python.yml
+
+- name: Swap
+  import_tasks: swap.yml
+
+- name: Kernel modules
+  import_tasks: kernelmodules.yml
+
+- name: Sysctl parameters
+  import_tasks: sysctl.yml
+
+- name: SELinux
+  import_tasks: selinux.yml
+
+- name: Time Synchronization
+  import_tasks: timesync.yml
+
+- name: Firewall settings
+  import_tasks: firewalld.yml

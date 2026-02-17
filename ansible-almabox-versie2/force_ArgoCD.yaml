@@ -1,0 +1,19 @@
+- name: Installeer k8s en ArgoCD op AlmaLinux
+  hosts: almaNode1
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars_files:
+    - sudoPassword.yml
+    - gitKey.yml
+  vars:
+    ansible_become_password: "{{ sudo_password }}"
+    git_token: "{{ git_token }}"
+  gather_facts: yes
+  tasks:
+    - name: Force sync Juice Shop application
+      ansible.builtin.command: >
+        kubectl -n argocd exec deploy/argocd-application-controller -- argocd app sync juiceshop
+      environment:
+        KUBECONFIG: /home/admin/.kube/config
+

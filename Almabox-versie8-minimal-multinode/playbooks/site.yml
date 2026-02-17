@@ -1,0 +1,51 @@
+---
+
+# -------------------------------------------
+
+- name: Bootstrap all Kubernetes nodes
+  hosts: all
+  become: true
+  roles:
+    - role: common
+      tags: [common, system]
+    - role: containerd
+      tags: [common, system]
+
+# -------------------------------------------
+
+- name: Control plane bootstrap
+  hosts: controlplane
+  become: true
+  roles:
+    - role: python
+      tags: [python, system]
+
+# -------------------------------------------
+
+- name: k8s bootstrap
+  hosts: all
+  become: true
+  roles:
+    - role: k8scommon
+      tags: [k8scommon, kubernetes]
+
+# -------------------------------------------
+
+- name: k8s control plane bootstrap
+  hosts: controlplane
+  become: true
+  roles:
+    - role: k8scontrolplane
+      tags: [k8scontrol, kubernetes]
+
+# # -------------------------------------------
+
+- name: k8s worker bootstrap
+  hosts: workers
+  become: true
+  roles:
+    - role: k8sworkers
+      tags: [k8sworker, kubernetes]
+
+# -------------------------------------------
+# -------------------------------------------

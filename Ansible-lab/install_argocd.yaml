@@ -1,0 +1,106 @@
+---
+- name: Install ArgoCD on AlmaLinux
+  hosts: almaNodes
+  become: yes
+  become_method: sudo
+  become_user: root
+  vars_files:
+    - sudoPassword.yml
+  vars:
+    ansible_become_password: "{{ sudo_password }}"
+    argo_version: "v3.2.1"
+  gather_facts: yes
+  tasks:
+    - name: Add Kubernetes repository for AlmaLinux
+      copy:
+        content: |
+          [kubernetes]
+          name=Kubernetes
+          baseurl=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://pkgs.k8s.io/core:/stable:/v1.34/rpm/repodata/repomd.xml.key
+        dest: /etc/yum.repos.d/kubernetes.repo
+        mode: '0644'
+
+    - name: Install kubectl (Kubernetes command line tool)
+      dnf:
+        name:
+          - kubectl
+        state: present
+      when: ansible_facts['distribution_major_version'] in ["9", "10"]
+
+    - name: Install Helm (Kubernetes package manager)
+      shell: |
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      args:
+        creates: /usr/local/bin/helm
+
+    - name: Install prerequisites (curl, wget, git, jq)
+      dnf:
+        name:
+          - curl
+          - wget
+          - git
+          - jq
+        state: present
+
+    - name: Add /usr/local/bin to PATH
+      lineinfile:
+        path: /etc/profile
+        line: 'export PATH=$PATH:/usr/local/bin'
+        create: yes
+
+    - name: Ensure .kube directory exists
+      file:
+        path: "~/.kube"
+        state: directory
+        mode: '0700'
+
+    - name: Create kubeconfig file for kubectl
+      copy:
+        content: |
+          apiVersion: v1
+          clusters:
+          - cluster:
+              server: https://{{ kubernetes_server }}
+              certificate-authority-data: {{ certificate_authority_data }}
+            name: kubernetes
+          contexts:
+          - context:
+              cluster: kubernetes
+              user: kubernetes-admin
+            name: kubernetes-context
+          current-context: kubernetes-context
+          kind: Config
+          preferences: {}
+          users:
+          - name: kubernetes-admin
+            user:
+              client-certificate-data: {{ client_certificate_data }}
+              client-key-data: {{ client_key_data }}
+        dest: "~/.kube/config"
+        mode: '0600'
+
+    - name: Download ArgoCD installation script
+      get_url:
+        url: https://raw.githubusercontent.com/argoproj/argo-cd/{{ argo_version }}/manifests/install.yaml
+        dest: /tmp/argocd_install.yaml
+
+    - name: Apply ArgoCD manifest to Kubernetes
+      command: kubectl apply -f /tmp/argocd_install.yaml
+
+    - name: Wait for ArgoCD to become available
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 8080
+        delay: 10
+        timeout: 300
+
+    - name: Retrieve ArgoCD admin password
+      command: kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 --decode
+      register: argocd_password
+
+    - name: Show ArgoCD admin password
+      debug:
+        msg: "ArgoCD Admin password: {{ argocd_password.stdout }}"

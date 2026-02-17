@@ -1,0 +1,44 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for common
+python_packages:
+  - python3
+  - python3-pip
+
+python_venv_path: /opt/ansible-k8s
+
+python_venv_interpreter: "{{ python_venv_path }}/bin/python"
+
+python_pip_packages:
+  - kubernetes>=27.0.0,<29.0.0
+  - PyYAML>=6.0,<7.0
+  - jsonpatch>1.32,<2.0
+
+python_imports:
+  - kubernetes
+  - yaml
+  - jsonpatch
+
+k8s_kernel_modules:
+  - overlay
+  - br_netfilter
+
+sysctl_params:
+  - { name: net.bridge.bridge-nf-call-iptables,  value: 1 }
+  - { name: net.bridge.bridge-nf-call-ip6tables, value: 1 }
+  - { name: net.ipv4.ip_forward,                 value: 1 }
+
+common_firewalld_enabled: true
+common_firewalld_trusted_interfaces:
+  - cni0
+  - flannel.1
+
+common_firewalld_open_ports_controlplane:
+  - 6443/tcp
+  - 2379-2380/tcp
+  - 10250/tcp
+  - 10251/tcp
+  - 10252/tcp
+
+common_firewalld_open_ports_workers:
+  - 10250/tcp

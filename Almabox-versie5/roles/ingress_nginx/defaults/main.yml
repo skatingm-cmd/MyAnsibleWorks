@@ -1,0 +1,11 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ingress_nginx
+ingress_nginx_namespace: ingress-nginx
+ingress_nginx_release_name: ingress-nginx
+
+ingress_nginx_chart: ingress-nginx
+ingress_nginx_repo_name: ingress-nginx
+ingress_nginx_repo_url: https://kubernetes.github.io/ingress-nginx
+
+ingress_nginx_chart_version: ""   # leeg = latest
