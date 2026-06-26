@@ -1,3 +1,0 @@
----
-- name: Install python3 and modules
-  import_tasks: python.yml

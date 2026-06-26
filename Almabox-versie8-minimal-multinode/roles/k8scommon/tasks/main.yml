@@ -1,7 +1,0 @@
----
-- name: Add the Kubernetes repository
-  import_tasks: 01_reporhel.yml
-
-- name: Install Kubernetes
-  import_tasks: 02_install.yml
-
