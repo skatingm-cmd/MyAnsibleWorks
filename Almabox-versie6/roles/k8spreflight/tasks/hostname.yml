@@ -1,6 +1,0 @@
-- name: Fail if hostname is localhost
-  ansible.builtin.fail:
-    msg: "Hostname is localhost — Kubernetes will break"
-  when:
-    - (ansible_facts['hostname'] | lower).startswith('localhost')
-    - inventory_hostname != 'localhost'

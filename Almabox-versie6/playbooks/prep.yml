@@ -1,7 +1,0 @@
----
-- name: Prep k8s nodes
-  hosts: k8s
-  become: true
-  roles:
-    - common
-    - containerd

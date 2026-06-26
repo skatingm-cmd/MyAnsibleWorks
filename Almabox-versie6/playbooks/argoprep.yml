@@ -1,8 +1,0 @@
-# SPDX-License-Identifier: MIT-0
----
-- name: Installing Helm, Ingress and ArgoCD
-  hosts: k8s
-  become: true
-  roles:
-    - helm
-    - ingress_nginx

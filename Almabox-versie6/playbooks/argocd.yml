@@ -1,6 +1,0 @@
----
-- name: Installing Helm, Ingress and ArgoCD
-  hosts: k8s
-  become: true
-  roles:
-    - argocd

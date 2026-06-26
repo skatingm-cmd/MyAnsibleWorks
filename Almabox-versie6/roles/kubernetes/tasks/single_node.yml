@@ -1,9 +1,0 @@
----
-- name: Allow scheduling pods on control plane (single-node)
-  command: >
-    kubectl taint nodes --all node-role.kubernetes.io/control-plane-
-  environment:
-    KUBECONFIG: /etc/kubernetes/admin.conf
-  changed_when: false
-  failed_when: false
-  when: single_node | bool
