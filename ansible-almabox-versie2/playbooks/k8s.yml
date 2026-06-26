@@ -1,6 +1,0 @@
----
-- name: Kubernetes bootstrap
-  hosts: k8s
-  become: true
-  roles:
-    - common
