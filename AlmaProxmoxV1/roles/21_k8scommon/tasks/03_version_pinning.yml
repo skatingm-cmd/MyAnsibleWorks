@@ -1,0 +1,39 @@
+---
+- name: Excluding Kubelet from updates
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: '^exclude='
+    line: 'exclude=kubelet*'
+    insertafter: EOF
+    create: yes
+    backup: yes
+
+- name: Verify Kubelet is excluded
+  ansible.builtin.command: dnf repolist --show-duplicates kubelet
+  register: dnf_list_output
+  changed_when: false
+  failed_when: false
+
+- name: Display excluded status
+  ansible.builtin.debug:
+    msg: "Kubelet {{ kubernetes_version }}{{ kubernetes_release }} is now pinned. Future 'dnf update' will skip this package."
+
+- name: Excluding Kubeadm from updates
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: '^exclude='
+    line: 'exclude=kubeadm*'
+    insertafter: EOF
+    create: yes
+    backup: yes
+
+- name: Verify Kubeadm is excluded
+  ansible.builtin.command: dnf repolist --show-duplicates kubeadm
+  register: dnf_list_output
+  changed_when: false
+  failed_when: false
+
+- name: Display excluded status
+  ansible.builtin.debug:
+    msg: "Kubeadm {{ kubernetes_version }}{{ kubernetes_release }} is now pinned. Future 'dnf update' will skip this package."
+

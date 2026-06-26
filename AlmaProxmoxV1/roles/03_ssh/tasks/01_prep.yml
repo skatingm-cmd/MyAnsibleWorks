@@ -1,0 +1,7 @@
+---
+- name: Ensure NetworkManager and SSH are installed and use the latest version
+  ansible.builtin.package:
+    name:
+      - NetworkManager
+      - openssh-server
+    state: latest

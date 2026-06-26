@@ -1,0 +1,13 @@
+---
+- name: Prepare nodes for bootstrap
+  hosts: all
+  become: true
+  vars:
+    ansible_ssh_port: 22
+  roles:
+    - role: 01_updates
+      tags: [updates, system]
+    - role: 02_hostname
+      tags: [hostname, system]
+    - role: 03_ssh
+      tags: [ssh, system]

@@ -1,0 +1,66 @@
+---
+- name: Allow new SSH port in firewalld
+  ansible.builtin.firewalld:
+    port: "{{ new_ssh_port }}/tcp"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  register: fw_result
+
+- name: Show firewall status
+  ansible.builtin.debug:
+    msg: "Firewall regel voor poort {{ new_ssh_port }} toegevoegd: {{ fw_result.changed }}"
+
+- name: Install policycoreutils-python-utils
+  ansible.builtin.dnf:
+    name: policycoreutils-python-utils
+    state: present
+    update_cache: yes
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Check if SSH port is already in SELinux policy
+  command: semanage port -l | grep "{{ new_ssh_port }}"
+  register: selinux_check
+  failed_when: false
+  changed_when: false
+
+- name: Add SSH port to SELinux policy
+  command: semanage port -a -t ssh_port_t -p tcp {{ new_ssh_port }}
+  when: selinux_check.rc != 0
+  register: selinux_add
+  changed_when: selinux_add.rc == 0
+
+# - name: Add SSH port to SELinux policy
+#   ansible.posix.selinux:
+#     port: "{{ new_ssh_port }}"
+#     proto: tcp
+#     type: ssh_port_t
+#   register: selinux_result
+
+- name: Change SSH port in config
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?Port'
+    line: 'Port {{ new_ssh_port }}'
+  notify: restart sshd
+
+- name: Restart SSH service
+  ansible.builtin.service:
+    name: sshd
+    state: restarted
+
+- name: Wait for SSH on new port
+  ansible.builtin.wait_for:
+    host: "{{ inventory_hostname }}"
+    port: "{{ new_ssh_port }}"
+    delay: 5
+    timeout: 120
+    state: started
+  retries: 5
+
+- name: Close old SSH port
+  ansible.builtin.firewalld:
+    port: "{{ old_ssh_port }}/tcp"
+    permanent: yes
+    state: disabled
+    immediate: yes

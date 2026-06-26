@@ -1,0 +1,13 @@
+---
+- name: Prepare nodes for bootstrap
+  hosts: all
+  become: true
+  vars:
+  roles:
+    - role: 11_common
+      tags: [common, system]
+    - role: 12_containerd
+      tags: [containerd, system]
+    - role: 13_python
+      tags: [python, system]
+      when: inventory_hostname in groups['controlplane']

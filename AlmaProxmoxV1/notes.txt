@@ -1,0 +1,9 @@
+multinode cluster:
+Argo: https://192.168.8.191:30443
+Juice Shop: http://192.168.8.191:31656
+
+ArgoCD admin wachtwoord ophalen:
+sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo
+
+juiceshop poort ophalen:
+sudo kubectl get svc -n juiceshop

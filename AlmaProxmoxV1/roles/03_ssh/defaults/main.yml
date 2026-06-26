@@ -1,0 +1,10 @@
+---
+internet_device: ens18
+connection_name: "{{ internet_device }}"
+cidr: 24
+gateway: 192.168.8.1
+dns:
+  - "{{ gateway }}"
+
+new_ssh_port: 10000
+old_ssh_port: 22

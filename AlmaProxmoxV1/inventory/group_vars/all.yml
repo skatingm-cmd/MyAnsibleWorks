@@ -1,0 +1,102 @@
+---
+internet_device: ens18
+connection_name: "{{ internet_device }}"
+cidr: 24
+gateway: 192.168.8.1
+dns:
+  - "{{ gateway }}"
+
+new_ssh_port: 10000
+old_ssh_port: 22
+
+kube_pod_cidr: ""
+cni_plugin: flannel
+cni_version: ""
+
+k8s_flannel_ports: ""
+
+pinned_packages:
+  - containerd*
+  - kubelet*
+  - kubeadm*
+  - kubectl*
+
+kernel_modules:
+  - overlay
+  - br_netfilter
+
+k8s_control_plane_ports:
+  - 6443/tcp    # API server
+  - 2379-2380/tcp  # etcd
+  - 10250/tcp
+  - 10259/tcp
+  - 10257/tcp
+
+k8s_worker_ports:
+  - 10250/tcp
+  - 30000-32767/tcp   # NodePort range (ingress)
+
+k8s_ingress_ports:
+  - 80/tcp
+  - 443/tcp
+
+containerd_version: 2.2.2-1.el10
+
+containerd_repo_url: https://download.docker.com/linux/centos/docker-ce.repo
+containerd_package_name: containerd.io
+containerd_config_path: /etc/containerd/config.toml
+containerd_service_name: containerd
+
+python_pip_package_version: 26.1.0
+
+python_packages:
+  - python3
+  - python3-pip
+
+python_pip_packages:
+  - "kubernetes>={{ python_pip_package_version }}"
+  - PyYAML
+  - jsonpatch
+
+python_imports:
+  - kubernetes
+  - yaml
+  - jsonpatch
+
+kubernetes_version: 1.34
+kubernetes_release: ".0"
+
+kube_apiserver_advertise_address: "{{ ansible_facts['default_ipv4']['address'] }}"
+kubeconfig_path: "/etc/kubernetes/admin.conf"
+
+helm_install_dir: /usr/local/bin
+helm_version: 3.20.0
+
+loadbalancer: NodePort
+
+ingress_nginx_namespace: ingress-nginx
+ingress_nginx_release_name: ingress-nginx
+
+ingress_nginx_chart: ingress-nginx
+ingress_nginx_repo_name: ingress-nginx
+ingress_nginx_repo_url: https://kubernetes.github.io/ingress-nginx
+
+ingress_nginx_chart_version:  4.14.3
+ingress_nginx_version: 1.14.3
+
+ingress_nginx_admission_webhooks: false
+
+worker_count: 2
+timeout_length: 5m
+
+argocd_namespace: argocd
+argocd_release_name: argocd
+
+argocd_chart: argo-cd
+argocd_repo_name: argo
+argocd_repo_url: https://argoproj.github.io/argo-helm
+
+argocd_hostname: argocd.local
+argocd_ingress_class: nginx
+
+# KaasWindMolen#24Tulpen

@@ -1,0 +1,5 @@
+kube_pod_cidr: 10.244.0.0/16
+cni_version: 0.28.1
+
+k8s_flannel_ports:
+  - 8472/udp

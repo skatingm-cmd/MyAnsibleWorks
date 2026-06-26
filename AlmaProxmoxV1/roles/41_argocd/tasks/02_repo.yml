@@ -1,0 +1,8 @@
+---
+- name: Add ArgoCD Helm repo
+  kubernetes.core.helm_repository:
+    name: argo
+    repo_url: https://argoproj.github.io/argo-helm
+    binary_path: "{{ helm_install_dir }}/helm"
+  environment:
+    KUBECONFIG: "{{ kubeconfig_path }}"

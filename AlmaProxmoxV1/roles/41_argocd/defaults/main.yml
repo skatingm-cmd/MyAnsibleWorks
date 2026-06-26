@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT-0
+---
+helm_install_dir: /usr/local/bin
+
+argocd_namespace: argocd
+argocd_release_name: argocd
+
+argocd_chart: argo-cd
+argocd_repo_name: argo
+argocd_repo_url: https://argoproj.github.io/argo-helm
+
+argocd_hostname: argocd.local
+argocd_ingress_class: nginx
+
+timeout_length: 5m

@@ -1,0 +1,19 @@
+---
+- name: install prerequisites
+  ansible.builtin.package:
+    name: kernel-modules-extra
+    state: present
+
+- name: Persist kernel modules configuration
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: |
+      {% for module in kernel_modules %}
+      {{ module }}
+      {% endfor %}
+
+- name: Ensure required kernel modules are loaded
+  ansible.builtin.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ kernel_modules }}"

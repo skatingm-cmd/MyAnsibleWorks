@@ -1,0 +1,24 @@
+---
+- name: Install k8s prerequisite packages
+  import_tasks: 01_prerequisites.yml
+
+- name: Set swap
+  import_tasks: 02_swap.yml
+
+- name: Set kernel modules
+  import_tasks: 03_kernel.yml
+
+- name: Set sysctl
+  import_tasks: 04_sysctl.yml
+
+- name: Time Synchronization
+  import_tasks: 05_timesync.yml
+
+- name: SELinux
+  import_tasks: 06_selinux.yml
+
+- name: Load CNI defaults
+  import_tasks: 07_loadcnidefault.yml
+
+- name: Firewall settings
+  import_tasks: 08_firewalld.yml

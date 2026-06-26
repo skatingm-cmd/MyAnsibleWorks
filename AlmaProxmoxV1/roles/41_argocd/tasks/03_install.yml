@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Render ArgoCD Helm values
+  ansible.builtin.template:
+    src: values.yaml.j2
+    dest: /tmp/argocd-values.yaml
+    mode: "0644"
+
+- name: Install ArgoCD via Helm
+  kubernetes.core.helm:
+    name: "{{ argocd_release_name }}"
+    chart_ref: "{{ argocd_chart }}"
+    chart_repo_url: "{{ argocd_repo_url }}"
+    release_namespace: "{{ argocd_namespace }}"
+    values_files:
+      - /tmp/argocd-values.yaml
+    state: present
+    wait: true
+    timeout: 10m
+    binary_path: "{{ helm_install_dir }}/helm"
+    kubeconfig: "{{ kubeconfig_path }}"

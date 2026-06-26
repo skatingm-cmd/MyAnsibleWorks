@@ -1,0 +1,32 @@
+---
+- name: Add flannel interface to trusted zone
+  ansible.posix.firewalld:
+    interface: flannel.1
+    zone: trusted
+    permanent: true
+    state: enabled
+
+- name: Add cni0 interface to trusted zone
+  ansible.posix.firewalld:
+    interface: cni0
+    zone: trusted
+    permanent: true
+    state: enabled
+
+- name: Add pod CIDR to trusted zone
+  ansible.posix.firewalld:
+    source: "{{ kube_pod_cidr }}"
+    zone: trusted
+    permanent: true
+    state: enabled
+
+- name: Allow Flannel VXLAN
+  ansible.posix.firewalld:
+    # port: "{{ k8s_flannel_ports }}"
+    port: 8472/udp
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  ansible.builtin.command: firewall-cmd --reload
+  changed_when: false

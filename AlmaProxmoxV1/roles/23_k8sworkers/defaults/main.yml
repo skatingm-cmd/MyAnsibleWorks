@@ -1,0 +1,5 @@
+---
+cni_plugin: flannel
+cni_version: ""
+kube_pod_cidr: ""
+kubeconfig_path: "/etc/kubernetes/admin.conf"

@@ -1,0 +1,11 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for argocd
+- name: Create the ArgoCD namespacd
+  import_tasks: 01_namespace.yml
+
+- name: Install ArgoCD repository
+  import_tasks: 02_repo.yml
+
+- name: Install ArgoCD
+  import_tasks: 03_install.yml

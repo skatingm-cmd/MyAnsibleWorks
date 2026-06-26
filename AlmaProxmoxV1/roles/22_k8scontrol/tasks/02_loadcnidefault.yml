@@ -1,0 +1,13 @@
+---
+- name: Load CNI defaults
+  ansible.builtin.include_vars:
+    file: "{{ inventory_dir }}/group_vars/cni/{{ cni_plugin }}.yml"
+  tags: cni
+
+- name: Assert pod network CIDR is defined
+  ansible.builtin.assert:
+    that:
+      - kube_pod_cidr | length > 0
+    fail_msg: >
+      kube_pod_cidr must be defined for CNI plugin {{ cni_plugin }}.
+      kubeadm init requires --pod-network-cidr.

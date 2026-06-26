@@ -1,0 +1,85 @@
+---
+- name: Prepare nodes for bootstrap
+  hosts: all
+  become: true
+  vars:
+    ansible_ssh_port: 22
+  roles:
+    - role: security
+      tags: [security, system]
+      
+# -------------------------------------------
+
+- name: Bootstrap all Kubernetes nodes
+  hosts: all
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    - role: common
+      tags: [common, system]
+    - role: containerd
+      tags: [common, system]
+
+# -------------------------------------------
+
+- name: Control plane bootstrap
+  hosts: controlplane
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    - role: python
+      tags: [python, system]
+
+# -------------------------------------------
+
+- name: k8s bootstrap
+  hosts: all
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    # - role: ipvs
+      # tags: [ipvs, kubernetes]
+    - role: k8scommon
+      tags: [k8scommon, kubernetes]
+
+# -------------------------------------------
+
+- name: k8s control plane bootstrap
+  hosts: controlplane
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    - role: k8scontrolplane
+      tags: [k8scontrol, kubernetes]
+
+# -------------------------------------------
+
+- name: k8s worker bootstrap
+  hosts: workers
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    - role: k8sworkers
+      tags: [k8sworker, kubernetes]
+
+# -------------------------------------------
+
+- name: ArgoCD bootstrap
+  hosts: controlplane
+  become: true
+  # vars:
+  #   ansible_ssh_port: "{{ new_ssh_port }}"
+  roles:
+    - role: helm
+      tags: [helm, argocd]
+    - role: ingress-nginx
+      tags: [ingress, argocd]
+    - role: argocd
+      tags: [argo, argocd]
+
+# -------------------------------------------

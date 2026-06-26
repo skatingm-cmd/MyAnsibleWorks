@@ -1,0 +1,9 @@
+---
+- name: Excluding packages from updates
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: '^exclude='
+    line: "exclude={{ pinned_packages | join(' ') }}"
+    insertafter: '[main]'
+    create: yes
+    backup: yes

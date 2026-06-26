@@ -1,0 +1,33 @@
+---
+- name: Allow every node to request service-account tokens (cluster-wide)
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: node-token-access                # unieke naam, kies zelf een betekenisvolle naam
+      subjects:
+        - kind: Group
+          name: system:nodes                    # ← alle node‑accounts zitten in deze groep
+          apiGroup: rbac.authorization.k8s.io
+      roleRef:
+        kind: ClusterRole
+        name: system:node                      # de standaard node‑rol die al “create token” mag
+        apiGroup: rbac.authorization.k8s.io
+
+# - name: Grant token access to a specific worker node (example)
+#   kubernetes.core.k8s:
+#     state: present
+#     definition:
+#       apiVersion: rbac.authorization.k8s.io/v1
+#       kind: ClusterRoleBinding
+#       metadata:
+#         name: worker-almanode6-token-access
+#       subjects:
+#         - kind: User
+#           name: system:node:almanode6      # <-- vervang door de echte node‑naam
+#       roleRef:
+#         kind: ClusterRole
+#         name: system:node
+#         apiGroup: rbac.authorization.k8s.io

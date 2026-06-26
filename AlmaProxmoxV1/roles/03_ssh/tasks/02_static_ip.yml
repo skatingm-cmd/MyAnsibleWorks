@@ -1,0 +1,11 @@
+---
+- name: Set static network
+  ansible.builtin.nmcli:
+    conn_name: "{{ internet_device }}"
+    ifname: "{{ connection_name }}"
+    type: ethernet
+    ip4: "{{ ansible_facts['default_ipv4']['address'] }}/{{ cidr }}"
+    gw4: "{{ gateway }}"
+    dns4: "{{ dns }}"
+    method4: manual
+    state: present

@@ -1,0 +1,31 @@
+---
+- name: Add ingress-nginx repo
+  kubernetes.core.helm_repository:
+    name: ingress-nginx
+    repo_url: https://kubernetes.github.io/ingress-nginx
+    binary_path: "{{ helm_install_dir }}/helm"
+
+- name: Install ingress-nginx controller
+  kubernetes.core.helm:
+    name: "{{ ingress_nginx_namespace }}"
+    chart_ref: "{{ ingress_nginx_namespace }}/{{ ingress_nginx_namespace }}"
+    chart_version: "{{ ingress_nginx_chart_version }}"
+    release_namespace: "{{ ingress_nginx_namespace }}"
+    create_namespace: true
+    wait: true
+    timeout: "{{ timeout_length }}"
+    binary_path: "{{ helm_install_dir }}/helm"
+    values:
+      controller:
+        image:
+          tag: "v{{ ingress_nginx_version }}"
+        replicaCount: "{{ worker_count }}"
+        admissionWebhooks:
+          enabled: "{{ ingress_nginx_admission_webhooks }}"
+        service:
+          type: "{{ loadbalancer }}"
+        ingressClassResource:
+          name: nginx
+          default: true
+  environment:
+    KUBECONFIG: "{{ kubeconfig_path }}"

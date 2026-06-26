@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Check if Helm is already installed
+  ansible.builtin.command: "{{ helm_install_dir }}/helm version --short"
+  register: helm_check
+  changed_when: false
+  failed_when: false
+
+- name: Ensure /usr/local/bin is in system PATH
+  ansible.builtin.copy:
+    dest: /etc/profile.d/local-bin.sh
+    content: |
+      export PATH=$PATH:{{ helm_install_dir }}
+    mode: "0644"
+  when: helm_check.rc != 0

@@ -1,0 +1,9 @@
+---
+- name: Pre ArgoCD bootstrap
+  hosts: controlplane
+  become: true
+  roles:
+    - role: 31_helm
+      tags: [helm, argocd]
+    - role: 32_ingress_nginx
+      tags: [ingress, argocd]

@@ -1,0 +1,24 @@
+---
+- name: Install kubectl
+  import_tasks: 01_kubectl.yml
+
+- name: Load CNI defaults
+  import_tasks: 02_loadcnidefault.yml
+
+- name: Initialize kubeadm
+  import_tasks: 03_kubeadminit.yml
+
+- name: Kube configuration for root
+  import_tasks: 04_kubeconfig.yml
+
+- name: Configure RBAC for nodes
+  import_tasks: 05_rbacnodes.yml
+
+- name: Deploy CNI plugin
+  include_tasks: "cni/{{ cni_plugin }}.yml"
+
+- name: Configure RBAC for Helm
+  import_tasks: 06_rbachelm.yml
+
+- name: Generate and publish join commands
+  import_tasks: 07_joincommand.yml

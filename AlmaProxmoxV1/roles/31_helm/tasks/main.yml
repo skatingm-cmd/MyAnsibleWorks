@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT-0
+---
+- name: Helm installation preparation
+  import_tasks: 01_prep.yml
+
+- name: Install Helm
+  import_tasks: 02_install.yml
+
+- name: Verify the Helm installation
+  import_tasks: 03_verification.yml

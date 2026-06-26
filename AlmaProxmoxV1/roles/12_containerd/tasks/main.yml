@@ -1,0 +1,10 @@
+---
+- name: Install the Docker repository
+  import_tasks: 01_reporhel_docker.yml
+  when: ansible_facts['pkg_mgr'] == "dnf"
+
+- name: Install containerd
+  import_tasks: 02_install.yml
+
+# - name: Apply version pinning
+#   import_tasks: 03_version_pinning.yml

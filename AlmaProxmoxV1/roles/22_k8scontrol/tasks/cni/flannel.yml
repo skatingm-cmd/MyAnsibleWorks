@@ -1,0 +1,19 @@
+---
+- name: Install Flannel CNI
+  kubernetes.core.k8s:
+    state: present
+    src: "https://raw.githubusercontent.com/flannel-io/flannel/v{{ cni_version }}/Documentation/kube-flannel.yml"
+    kubeconfig: "{{ kubeconfig_path }}"
+    wait: yes
+    wait_timeout: 300
+
+- name: Wait for CoreDNS to be ready
+  ansible.builtin.command: >
+    kubectl get pods -n kube-system
+    -l k8s-app=kube-dns
+    -o jsonpath='{.items[*].status.containerStatuses[*].ready}'
+  register: coredns_ready
+  retries: 20
+  delay: 15
+  until: coredns_ready.stdout.split() | unique == ['true']
+  changed_when: false

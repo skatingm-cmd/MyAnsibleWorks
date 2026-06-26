@@ -1,0 +1,7 @@
+---
+- name: Prepare nodes for bootstrap
+  hosts: all
+  become: true
+  roles:
+    - role: postinstallupdates
+      tags: [updates, system]

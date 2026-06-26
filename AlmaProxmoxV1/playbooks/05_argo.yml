@@ -1,0 +1,9 @@
+---
+- name: ArgoCD bootstrap
+  hosts: controlplane
+  become: true
+  roles:
+    - role: 41_argocd
+      tags: [argo, argocd]
+    - role: 51_postinstall
+      tags: [postinstall, argocd]

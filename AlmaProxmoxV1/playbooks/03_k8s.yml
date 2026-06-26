@@ -1,0 +1,16 @@
+---
+- name: k8s bootstrap
+  hosts: all
+  become: true
+  vars:
+  roles:
+    - role: 21_k8scommon
+      tags: [k8scommon, kubernetes]
+    - role: 22_k8scontrol
+      tags: [k8scontrol, kubernetes]
+      when: inventory_hostname in groups['controlplane']
+    - role: 23_k8sworkers
+      tags: [k8sworkers, kubernetes]
+      when: inventory_hostname in groups['workers']
+    - role: 24_k8spost
+      tags: [k8spost, kubernetes]

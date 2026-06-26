@@ -1,0 +1,6 @@
+---
+- name: Load CNI defaults
+  import_tasks: 01_loadcnidefault.yml
+
+- name: CNI firewall settings
+  include_tasks: "cni/{{ cni_plugin }}.yml"

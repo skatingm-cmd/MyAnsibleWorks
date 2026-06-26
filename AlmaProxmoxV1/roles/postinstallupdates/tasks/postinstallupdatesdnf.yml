@@ -1,0 +1,26 @@
+---
+- name: Update cache
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    security: "{{ security_only }}"
+    exclude: "{{ pinned_packages }}"
+
+- name: Autoremove unneeded packages installed as dependencies
+  ansible.builtin.dnf:
+    autoremove: true
+
+- name: Check if a reboot is required
+  ansible.builtin.command: needs-restarting -r
+  register: reboot_check_result
+  changed_when: false
+  failed_when: false
+
+- name: Reboot server if required
+  ansible.builtin.reboot:
+    reboot_timeout: 600  
+  when: reboot_check_result.rc == 1

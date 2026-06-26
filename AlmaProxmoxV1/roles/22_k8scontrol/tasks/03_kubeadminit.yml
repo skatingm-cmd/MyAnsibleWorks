@@ -1,0 +1,11 @@
+---
+- name: Initialize Kubernetes control plane
+  ansible.builtin.command: >
+    kubeadm init
+    --apiserver-advertise-address={{ kube_apiserver_advertise_address }}
+    --pod-network-cidr={{ kube_pod_cidr }}
+    --cri-socket=unix:///run/containerd/containerd.sock
+    --upload-certs
+  args:
+    creates: "{{ kubeconfig_path }}"
+  register: kubeadm_init

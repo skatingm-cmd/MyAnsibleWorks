@@ -1,0 +1,9 @@
+---
+pinned_packages:
+  - containerd*
+  - kubelet*
+  - kubeadm*
+  - kubectl*
+  - helm*
+
+security_only: true

@@ -1,0 +1,4 @@
+---
+- name: Post installation update for dnf machines
+  import_tasks: postinstallupdatesdnf.yml
+  when: ansible_facts['pkg_mgr'] == "dnf"

@@ -1,0 +1,23 @@
+- name: Install kubectl (controlplane only)
+  ansible.builtin.package:
+    name: "kubectl-{{ kubernetes_version }}{{ kubernetes_release }}"
+    state: present
+
+# - name: Excluding Kubectl from updates
+#   ansible.builtin.lineinfile:
+#     path: /etc/dnf/dnf.conf
+#     regexp: '^exclude='
+#     line: 'exclude=kubectl*'
+#     insertafter: EOF
+#     create: yes
+#     backup: yes
+
+# - name: Verify Kubectl is excluded
+#   ansible.builtin.command: dnf repolist --show-duplicates kubectl
+#   register: dnf_list_output
+#   changed_when: false
+#   failed_when: false
+
+# - name: Display excluded status
+#   ansible.builtin.debug:
+#     msg: "Kubectl {{ kubernetes_version }}{{ kubernetes_release }} is now pinned. Future 'dnf update' will skip this package."

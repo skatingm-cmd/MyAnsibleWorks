@@ -1,0 +1,19 @@
+---
+- name: Excluding Containerd from updates
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    regexp: '^exclude='
+    line: 'exclude=containerd*'
+    insertafter: EOF
+    create: yes
+    backup: yes
+
+- name: Verify containerd is excluded
+  ansible.builtin.command: dnf repolist --show-duplicates {{ containerd_service_name }}
+  register: dnf_list_output
+  changed_when: false
+  failed_when: false
+
+- name: Display excluded status
+  ansible.builtin.debug:
+    msg: "Containerd {{ containerd_version }} is now pinned. Future 'dnf update' will skip this package."

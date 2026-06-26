@@ -1,0 +1,23 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for ingress_nginx
+kubeconfig_path: "/etc/kubernetes/admin.conf"
+
+helm_install_dir: /usr/local/bin
+
+ingress_nginx_namespace: ingress-nginx
+ingress_nginx_release_name: ingress-nginx
+
+ingress_nginx_chart: ingress-nginx
+ingress_nginx_repo_name: ingress-nginx
+ingress_nginx_repo_url: https://kubernetes.github.io/ingress-nginx
+
+ingress_nginx_chart_version:  4.14.3
+ingress_nginx_version: 1.14.3
+
+ingress_nginx_admission_webhooks: false
+
+loadbalancer: NodePort
+
+worker_count: 2
+timeout_length: 5m

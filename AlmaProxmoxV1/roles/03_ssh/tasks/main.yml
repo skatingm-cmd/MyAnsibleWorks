@@ -1,0 +1,12 @@
+---
+- name: Ensure prerequisites are installed
+  import_tasks: 01_prep.yml
+
+- name: Set SSH ip
+  import_tasks: 02_static_ip.yml
+
+- name: Set SSH hardening
+  import_tasks: 03_sshhardening.yml
+
+- name: Change SSH port
+  import_tasks: 04_port.yml

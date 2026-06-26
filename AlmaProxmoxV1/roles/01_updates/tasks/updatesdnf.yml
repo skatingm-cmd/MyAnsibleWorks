@@ -1,0 +1,36 @@
+---
+- name: Update cache
+  ansible.builtin.dnf:
+    update_cache: true
+
+- name: Ensure dnf-utils and other basic tools are installed
+  ansible.builtin.dnf:
+    name:
+      - dnf-utils
+      - bind-utils
+      - bash-completion
+      - vim-enhanced
+      - nano
+      - rsync
+      - tar
+    state: present
+
+- name: Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Autoremove unneeded packages installed as dependencies
+  ansible.builtin.dnf:
+    autoremove: true
+
+- name: Check if a reboot is required
+  ansible.builtin.command: needs-restarting -r
+  register: reboot_check_result
+  changed_when: false
+  failed_when: false
+
+- name: Reboot server if required
+  ansible.builtin.reboot:
+    reboot_timeout: 600  
+  when: reboot_check_result.rc == 1

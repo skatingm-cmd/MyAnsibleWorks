@@ -1,0 +1,10 @@
+---
+- name: Set SELinux version
+  ansible.builtin.package:
+    name: selinux-policy #-{{ selinux_version }}"
+    state: present
+
+- name: Set SELinux to permissive (runtime + persistent)
+  ansible.posix.selinux:
+    policy: targeted
+    state: permissive

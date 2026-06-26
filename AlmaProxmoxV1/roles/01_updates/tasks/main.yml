@@ -1,0 +1,4 @@
+---
+- name: Init update for dnf machines
+  import_tasks: updatesdnf.yml
+  when: ansible_facts['pkg_mgr'] == "dnf"

@@ -1,0 +1,9 @@
+---
+- name: Add the Kubernetes repository
+  import_tasks: 01_reporhel.yml
+
+- name: Install Kubernetes
+  import_tasks: 02_install.yml
+
+# - name: Version pin kubernetes packages
+#   import_tasks: 03_version_pinning.yml

@@ -1,0 +1,4 @@
+- name: install prerequisites
+  ansible.builtin.package:
+    name: kernel-modules-extra
+    state: present

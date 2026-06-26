@@ -1,0 +1,16 @@
+---
+- name: Install dependencies
+  ansible.builtin.package:
+    name: dnf-utils
+    state: present
+
+- name: Add containerd repository
+  ansible.builtin.get_url:
+    url: "{{ containerd_repo_url }}"
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: '0644'
+
+- name: refresh_dnf_cache
+  ansible.builtin.dnf:
+    update_cache: yes
+    cacheonly: no
