@@ -1,6 +1,0 @@
----
-- name: Bootstrap all Kubernetes nodes
-  hosts: all
-  become: true
-  roles:
-    - common
