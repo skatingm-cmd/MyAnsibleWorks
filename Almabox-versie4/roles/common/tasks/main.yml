@@ -1,9 +1,0 @@
-#SPDX-License-Identifier: MIT-0
----
-# Common OS preparation for Kubernetes (AlmaLinux)
-- include_tasks: swap.yml
-- include_tasks: kernelmodules.yml
-- include_tasks: sysctl.yml
-- include_tasks: selinux.yml
-- include_tasks: timesync.yml
-- include_tasks: firewalld.yml
